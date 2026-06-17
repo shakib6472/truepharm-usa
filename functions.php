@@ -98,6 +98,14 @@ foreach ( $truepharm_includes as $truepharm_include ) {
 unset( $truepharm_include, $truepharm_path );
 
 /* ---------------------------------------------------------------------
+ * Give the custom logo the brief's .logo-img sizing class.
+ * ------------------------------------------------------------------- */
+function truepharm_custom_logo_class( string $html ): string {
+	return str_replace( 'class="custom-logo"', 'class="custom-logo logo-img"', $html );
+}
+add_filter( 'get_custom_logo', 'truepharm_custom_logo_class' );
+
+/* ---------------------------------------------------------------------
  * Cart count helpers (used by the header badge and the Woo fragment).
  * ------------------------------------------------------------------- */
 function truepharm_cart_count(): int {
