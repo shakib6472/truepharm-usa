@@ -142,18 +142,9 @@ $tp_hero_mission = get_theme_mod(
 					foreach ( $tp_products as $tp_product ) {
 						$tp_pid = $tp_product->get_id();
 
-						// Molecular Class = primary product category.
-						$tp_class_name = '';
-						$tp_terms      = get_the_terms( $tp_pid, 'product_cat' );
-						if ( $tp_terms && ! is_wp_error( $tp_terms ) ) {
-							$tp_class_name = $tp_terms[0]->name;
-						}
-
-						// Form = product meta (defaults to Lyophilized when unset).
-						$tp_form = (string) get_post_meta( $tp_pid, '_tp_form', true );
-						if ( '' === $tp_form ) {
-							$tp_form = __( 'Lyophilized', 'truepharm' );
-						}
+						// Molecular Class = primary product category; Form = product meta.
+						$tp_class_name = function_exists( 'tp_get_molecular_class' ) ? tp_get_molecular_class( $tp_pid ) : '';
+						$tp_form       = function_exists( 'tp_get_product_form' ) ? tp_get_product_form( $tp_pid ) : __( 'Lyophilized', 'truepharm' );
 
 						$tp_add_classes = 'btn btn-add';
 						$tp_add_atts    = '';

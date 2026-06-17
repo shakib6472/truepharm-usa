@@ -100,9 +100,33 @@ function truepharm_enqueue_assets(): void {
 	if ( function_exists( 'WC' ) ) {
 		wp_enqueue_script( 'wc-cart-fragments' );
 
-		// AJAX add-to-cart for the homepage featured carousel.
-		if ( is_front_page() ) {
+		// AJAX add-to-cart for card buttons on the homepage carousel and shop grid.
+		if ( is_front_page() || is_shop() || is_product_taxonomy() ) {
 			wp_enqueue_script( 'wc-add-to-cart' );
+		}
+
+		// Single product interactions (variants, gallery, tabs, bundle, add to cart).
+		if ( is_product() ) {
+			wp_enqueue_script(
+				'truepharm-product',
+				TRUEPHARM_URI . '/assets/js/product.js',
+				array(),
+				truepharm_asset_version( 'assets/js/product.js' ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+			wp_localize_script(
+				'truepharm-product',
+				'tp_product',
+				array(
+					'wc_ajax_url' => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( '%%endpoint%%' ) : '',
+					'cart_url'    => wc_get_cart_url(),
+					'added_text'  => __( 'Added ✓', 'truepharm' ),
+					'select_text' => __( 'Please select a vial size first.', 'truepharm' ),
+				)
+			);
 		}
 	}
 
