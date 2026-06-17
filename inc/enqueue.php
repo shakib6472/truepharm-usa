@@ -86,9 +86,38 @@ function truepharm_enqueue_assets(): void {
 		)
 	);
 
+	// AJAX bridge (newsletter, etc.) — shared nonce action "tp_ajax".
+	wp_localize_script(
+		'truepharm-main',
+		'tp_ajax',
+		array(
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'nonce'    => wp_create_nonce( 'tp_ajax' ),
+		)
+	);
+
 	// WooCommerce cart fragments — keeps the header badge live site-wide.
 	if ( function_exists( 'WC' ) ) {
 		wp_enqueue_script( 'wc-cart-fragments' );
+
+		// AJAX add-to-cart for the homepage featured carousel.
+		if ( is_front_page() ) {
+			wp_enqueue_script( 'wc-add-to-cart' );
+		}
+	}
+
+	// COA Library archive — live table filter.
+	if ( is_post_type_archive( 'coa_library' ) ) {
+		wp_enqueue_script(
+			'truepharm-coa-filter',
+			TRUEPHARM_URI . '/assets/js/coa-filter.js',
+			array(),
+			truepharm_asset_version( 'assets/js/coa-filter.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 
 	// Threaded comments where applicable.

@@ -85,6 +85,7 @@ $truepharm_includes = array(
 	'inc/woo-product-fields.php', // Molecular Class, Form, vial size variants.
 	'inc/bundle-pricing.php',   // Quantity-based per-product bundle discounts.
 	'inc/rewards.php',          // Custom rewards points engine.
+	'inc/newsletter.php',       // Newsletter capture (custom table + AJAX).
 	'inc/turnstile.php',        // Cloudflare Turnstile placeholder hooks.
 	'inc/entrance-gate.php',    // Age / compliance entrance gate.
 );

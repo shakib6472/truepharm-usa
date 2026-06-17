@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ===================================================================== -->
+<!--  TRUEPHARM USA - ENTRANCE GATE / COMPLIANCE POPUP TEMPLATE              -->
+<!--  UPDATES: Applied perfected .metallic-text-warm gradient to the button  -->
+<!--           Terminology update from "formulations" to "Formulas"          -->
+<!-- ===================================================================== -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Access | TruePharm USA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-card: #ffffff;
+            --navy: #15527e;
+            --slate: #1e293b;
+            --slate-soft: #475569;
+            --line: #e2e8f0;
+
+            /* Perfected Base Copper/Rose Gold Stop (Edge color) */
+            --warm: #b37a6b;
+            --warm-soft: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Background simulated behind the popup */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><rect width="100" height="100" fill="%231e293b"/></svg>') #f1f5f9;
+        }
+
+        /* Modal Overlay */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        /* Modal Box */
+        .gate-box {
+            background: var(--bg-card);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--warm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top accent bar (Multi-stop Metallic Rose Gold sweep) */
+        .gate-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #b37a6b, #d6a698, #fae3da, #d6a698, #b37a6b);
+        }
+
+        .gate-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .gate-logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .gate-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin: 0 0 16px 0;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        /* Severe Warning Box (Kept Red for Legal Emphasis) */
+        .gate-warning {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            border-radius: 8px;
+            padding: 16px;
+            color: #be123c;
+            font-size: 0.9rem;
+            font-family: 'Montserrat';
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Text & Custom Rose Gold Checkmarks */
+        .gate-text {
+            font-size: 0.95rem;
+            color: var(--slate-soft);
+            line-height: 1.7;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .gate-text strong {
+            color: var(--slate);
+        }
+
+        .gate-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 0 0;
+        }
+
+        .gate-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        .gate-list li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warm);
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        /* Buttons */
+        .gate-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        /* WARM METALLIC TEXT CLASS (For consistency with product page) */
+        .metallic-text-warm {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            background: linear-gradient(to bottom, #ffffff 0%, #9e5039 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0px 1px 0px rgba(255, 255, 255, 0.6)) drop-shadow(0px 3px 4px rgba(40, 20, 15, 0.7));
+        }
+
+        /* METALLIC ROSE GOLD / COPPER AGREE BUTTON PLATE */
+        .btn-agree {
+            /* Sweeps from Medium Rose Gold -> Soft Copper -> Bright Center */
+            background: linear-gradient(135deg, #b37a6b 0%, #d6a698 25%, #fae3da 50%, #d6a698 75%, #b37a6b 100%);
+            border: 1px solid #9c5f4b;
+            padding: 16px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            /* 3D Box Shadows */
+            box-shadow:
+                inset 1px 1px 2px rgba(255, 245, 240, 0.6),
+                inset -1px -1px 3px rgba(90, 45, 35, 0.5),
+                inset 0 0 20px rgba(250, 227, 218, 0.2),
+                0 8px 20px -8px rgba(124, 76, 65, 0.6);
+        }
+
+        .btn-agree:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #c48979 0%, #e8b6a7 25%, #ffffff 50%, #e8b6a7 75%, #c48979 100%);
+            box-shadow:
+                inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+                inset -1px -1px 3px rgba(90, 45, 35, 0.6),
+                inset 0 0 20px rgba(250, 227, 218, 0.3),
+                0 12px 24px -8px rgba(124, 76, 65, 0.7);
+        }
+
+        /* Navy Exit Button */
+        .btn-exit {
+            background: transparent;
+            color: var(--slate);
+            border: 2px solid var(--line);
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        .btn-exit:hover {
+            background: var(--warm-soft);
+            border-color: var(--slate-soft);
+        }
+
+        @media(max-width:600px) {
+            .gate-box {
+                padding: 40px 24px;
+            }
+
+            .gate-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Global Overlay -->
+    <div class="gate-overlay" id="complianceGate">
+        <div class="gate-box">
+
+            <div class="gate-logo">
+                <img src="image.png" alt="TruePharm USA Logo">
+            </div>
+
+            <h1 class="gate-title">Restricted Laboratory Portal</h1>
+
+            <div class="gate-warning">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                    </path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Strict Research Compliance
+            </div>
+
+            <div class="gate-text">
+                <p>Welcome to TruePharm USA. Access to this platform is restricted exclusively to qualified researchers
+                    and institutional representatives.</p>
+                <p>By entering this site, you officially acknowledge and agree to the following terms:</p>
+                <ul class="gate-list">
+                    <li><strong>You are 21 years of age or older.</strong></li>
+                    <!-- TERMINOLOGY UPDATE: "Formulas" -->
+                    <li>All <strong>formulas</strong> sold here are strictly for <strong>in-vitro laboratory research
+                            purposes only.</strong></li>
+                    <li>These compounds are <strong>NOT</strong> intended for human consumption, veterinary use, or
+                        therapeutic application.</li>
+                    <li>You are a qualified professional equipped to handle and utilize these materials safely.</li>
+                </ul>
+            </div>
+
+            <div class="gate-actions">
+                <!-- The onclick here simply hides the gate for the preview. The developer will hook this to a cookie. -->
+                <button class="btn-agree" onclick="document.getElementById('complianceGate').style.display='none';">
+                    <span class="metallic-text-warm">I Agree & Confirm Age (Enter)</span>
+                </button>
+                <!-- Redirects away if they do not agree -->
+                <button class="btn-exit" onclick="window.location.href='https://www.google.com';">I Disagree (Leave
+                    Site)</button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -157,12 +157,106 @@
 	}
 
 	/* -----------------------------------------------------------------
+	 * 4. Featured products carousel (prev/next arrows)
+	 * --------------------------------------------------------------- */
+	function initCarousel() {
+		var car = document.getElementById('carousel');
+		var prev = document.getElementById('carPrev');
+		var next = document.getElementById('carNext');
+		if (!car || !prev || !next) {
+			return;
+		}
+
+		function step() {
+			var card = car.querySelector('.product-card');
+			return card ? card.offsetWidth + 24 : 324;
+		}
+
+		prev.addEventListener('click', function () {
+			car.scrollBy({ left: -step(), behavior: 'smooth' });
+		});
+		next.addEventListener('click', function () {
+			car.scrollBy({ left: step(), behavior: 'smooth' });
+		});
+	}
+
+	/* -----------------------------------------------------------------
+	 * 5. Newsletter subscribe (AJAX, no reload)
+	 * --------------------------------------------------------------- */
+	function initNewsletter() {
+		var form = document.getElementById('tp-news-form');
+		var ajax = window.tp_ajax || {};
+		if (!form || !ajax.ajax_url) {
+			return;
+		}
+
+		var email = document.getElementById('tp-news-email');
+		var msg = document.getElementById('tp-news-msg');
+		var button = form.querySelector('button[type="submit"]');
+
+		function setMessage(text, type) {
+			if (!msg) {
+				return;
+			}
+			msg.textContent = text;
+			msg.className = 'news-msg ' + (type || '');
+		}
+
+		form.addEventListener('submit', function (e) {
+			e.preventDefault();
+
+			var value = email ? email.value.trim() : '';
+			if (value === '' || value.indexOf('@') === -1) {
+				setMessage('Please enter a valid email address.', 'error');
+				return;
+			}
+
+			if (button) {
+				button.disabled = true;
+			}
+			setMessage('', '');
+
+			var body = 'action=tp_newsletter'
+				+ '&nonce=' + encodeURIComponent(ajax.nonce || '')
+				+ '&email=' + encodeURIComponent(value);
+
+			fetch(ajax.ajax_url, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: body
+			})
+				.then(function (res) {
+					return res.json();
+				})
+				.then(function (data) {
+					if (data && data.success) {
+						setMessage(data.data && data.data.message ? data.data.message : 'Subscribed!', 'success');
+						form.reset();
+					} else {
+						setMessage(data && data.data && data.data.message ? data.data.message : 'Something went wrong.', 'error');
+					}
+				})
+				.catch(function () {
+					setMessage('Something went wrong. Please try again.', 'error');
+				})
+				.finally(function () {
+					if (button) {
+						button.disabled = false;
+					}
+				});
+		});
+	}
+
+	/* -----------------------------------------------------------------
 	 * Boot
 	 * --------------------------------------------------------------- */
 	function init() {
 		initReveal();
 		initMenu();
 		initCart();
+		initCarousel();
+		initNewsletter();
 	}
 
 	if (document.readyState === 'loading') {
