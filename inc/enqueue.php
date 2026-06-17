@@ -130,6 +130,20 @@ function truepharm_enqueue_assets(): void {
 		}
 	}
 
+	// My Account — rewards redeem + referral copy.
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		wp_enqueue_script(
+			'truepharm-rewards',
+			TRUEPHARM_URI . '/assets/js/rewards.js',
+			array( 'truepharm-main' ),
+			truepharm_asset_version( 'assets/js/rewards.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+	}
+
 	// COA Library archive — live table filter.
 	if ( is_post_type_archive( 'coa_library' ) ) {
 		wp_enqueue_script(

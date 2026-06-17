@@ -152,6 +152,143 @@ add_action( 'woocommerce_after_main_content', 'truepharm_wc_wrapper_end', 10 );
 // The slide-in panel + utility icons replace the default Woo header cart.
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
+// Render the Turnstile widget directly above the Place Order button.
+add_action(
+	'woocommerce_review_order_before_submit',
+	static function () {
+		do_action( 'tp_turnstile_widget' );
+	}
+);
+
+/* ---------------------------------------------------------------------
+ * My Account — custom "Rewards" endpoint.
+ * ------------------------------------------------------------------- */
+function truepharm_add_rewards_endpoint(): void {
+	add_rewrite_endpoint( 'rewards', EP_ROOT | EP_PAGES );
+}
+add_action( 'init', 'truepharm_add_rewards_endpoint' );
+
+/**
+ * Insert "TruePharm Rewards" into the account menu before Logout.
+ */
+function truepharm_account_menu_items( array $items ): array {
+	$new = array();
+	foreach ( $items as $key => $label ) {
+		if ( 'customer-logout' === $key ) {
+			$new['rewards'] = __( 'TruePharm Rewards', 'truepharm' );
+		}
+		$new[ $key ] = $label;
+	}
+	if ( ! isset( $new['rewards'] ) ) {
+		$new['rewards'] = __( 'TruePharm Rewards', 'truepharm' );
+	}
+	return $new;
+}
+add_filter( 'woocommerce_account_menu_items', 'truepharm_account_menu_items' );
+
+/**
+ * Render the Rewards endpoint content.
+ */
+function truepharm_rewards_endpoint_content(): void {
+	if ( function_exists( 'wc_get_template' ) ) {
+		wc_get_template( 'myaccount/dashboard-rewards.php' );
+	}
+}
+add_action( 'woocommerce_account_rewards_endpoint', 'truepharm_rewards_endpoint_content' );
+
+/**
+ * Order History: 10 orders per page.
+ */
+function truepharm_orders_per_page( array $args ): array {
+	$args['limit'] = 10;
+	return $args;
+}
+add_filter( 'woocommerce_my_account_my_orders_query', 'truepharm_orders_per_page' );
+
+/**
+ * Map a WooCommerce order status to a display label + status-tag CSS class.
+ *
+ * @return array{class:string,label:string}
+ */
+function truepharm_order_status_meta( string $status ): array {
+	$map = array(
+		'pending'    => array( 'status-processing', __( 'Processing', 'truepharm' ) ),
+		'processing' => array( 'status-processing', __( 'Processing', 'truepharm' ) ),
+		'on-hold'    => array( 'status-shipped', __( 'Shipped', 'truepharm' ) ),
+		'shipped'    => array( 'status-shipped', __( 'Shipped', 'truepharm' ) ),
+		'completed'  => array( 'status-completed', __( 'Completed', 'truepharm' ) ),
+		'cancelled'  => array( 'status-cancelled', __( 'Cancelled', 'truepharm' ) ),
+		'refunded'   => array( 'status-cancelled', __( 'Cancelled', 'truepharm' ) ),
+		'failed'     => array( 'status-cancelled', __( 'Cancelled', 'truepharm' ) ),
+	);
+	$entry = $map[ $status ] ?? array( 'status-processing', ucfirst( $status ) );
+	return array(
+		'class' => $entry[0],
+		'label' => $entry[1],
+	);
+}
+
+/**
+ * Render an order status tag.
+ */
+function truepharm_order_status_tag( WC_Order $order ): string {
+	$meta = truepharm_order_status_meta( $order->get_status() );
+	return sprintf(
+		'<span class="status-tag %s">%s</span>',
+		esc_attr( $meta['class'] ),
+		esc_html( $meta['label'] )
+	);
+}
+
+/**
+ * Registration: compliance acknowledgment checkbox (added via hook).
+ */
+function truepharm_register_compliance_field(): void {
+	?>
+	<div class="compliance-box">
+		<div class="checkbox-group">
+			<input type="checkbox" id="tp_compliance" name="tp_compliance" value="1" <?php checked( ! empty( $_POST['tp_compliance'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing ?> required>
+			<label for="tp_compliance" style="font-weight:700; color:var(--slate);"><?php esc_html_e( 'I confirm I am a qualified researcher.', 'truepharm' ); ?></label>
+		</div>
+		<p><?php esc_html_e( 'By registering, I acknowledge that all formulations provided by TruePharm USA are strictly for in-vitro laboratory research and are not for human or veterinary use.', 'truepharm' ); ?></p>
+	</div>
+	<?php
+}
+add_action( 'woocommerce_register_form', 'truepharm_register_compliance_field' );
+
+/**
+ * Registration: require the compliance checkbox.
+ */
+function truepharm_validate_compliance( $errors ) {
+	if ( empty( $_POST['tp_compliance'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$errors->add( 'tp_compliance_error', __( 'You must confirm you are a qualified researcher to register.', 'truepharm' ) );
+	}
+	return $errors;
+}
+add_filter( 'woocommerce_registration_errors', 'truepharm_validate_compliance', 10, 1 );
+
+/**
+ * Flush rewrite rules once so the rewards endpoint resolves.
+ */
+function truepharm_maybe_flush_rewards_endpoint(): void {
+	if ( '1' !== get_option( 'tp_rewards_endpoint_flushed' ) ) {
+		truepharm_add_rewards_endpoint();
+		flush_rewrite_rules();
+		update_option( 'tp_rewards_endpoint_flushed', '1' );
+	}
+}
+add_action( 'init', 'truepharm_maybe_flush_rewards_endpoint', 11 );
+
+// Re-flush on theme activation.
+add_action(
+	'after_switch_theme',
+	static function () {
+		truepharm_add_rewards_endpoint();
+		delete_option( 'tp_rewards_endpoint_flushed' );
+		flush_rewrite_rules();
+	}
+);
+
 /* ---------------------------------------------------------------------
  * Fallback menu for the slide-in panel (used until a Primary menu is
  * assigned in Appearance → Menus). Mirrors the navigation in the brief.
