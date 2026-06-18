@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 $tp_legal_pages = array(
-	'terms-of-use'         => __( 'Terms of Use', 'truepharm' ),
+	'terms-of-service'     => __( 'Terms of Service', 'truepharm' ),
 	'privacy-policy'       => __( 'Privacy Policy', 'truepharm' ),
-	'shipping-returns'     => __( 'Shipping & Returns', 'truepharm' ),
+	'shipping-policy'      => __( 'Shipping Policy', 'truepharm' ),
 	'compliance-statement' => __( 'Compliance Statement', 'truepharm' ),
 );
 

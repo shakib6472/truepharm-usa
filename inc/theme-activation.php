@@ -86,11 +86,15 @@ function truepharm_ensure_page( string $slug, string $title, string $template, s
  * Create / repair every theme page and assign its template.
  */
 function truepharm_ensure_pages(): void {
-	// Standalone content pages.
+	$lorem_simple = '<p><!-- CLIENT TO FILL --> Lorem ipsum dolor sit amet, consectetur adipiscing elit. This placeholder content is editable from the WordPress editor.</p>';
+
+	// Standalone content pages (default page.php template).
 	truepharm_ensure_page( 'why-us', 'Why Us', 'page-why-us.php' );
 	truepharm_ensure_page( 'faq', 'Frequently Asked Questions', 'page-faq.php' );
 	truepharm_ensure_page( 'contact-us', 'Contact Us', 'page-contact.php' );
 	truepharm_ensure_page( 'rewards-program', 'Rewards Program', 'page-rewards.php' );
+	truepharm_ensure_page( 'returns-logistics', 'Returns & Logistics', 'default', '<h2>Returns &amp; Logistics</h2>' . $lorem_simple );
+	truepharm_ensure_page( 'track-my-order', 'Track My Order', 'default', '<h2>Track Your Order</h2><p>Enter your order details below to view the latest logistics status.</p>[woocommerce_order_tracking]' );
 
 	// Legal parent + policy sub-pages.
 	$legal_id = truepharm_ensure_page(
@@ -103,13 +107,13 @@ function truepharm_ensure_pages(): void {
 	$lorem = '<p><!-- CLIENT TO FILL --> Lorem ipsum dolor sit amet, consectetur adipiscing elit. This placeholder content is editable from the WordPress editor. Replace it with your finalized policy text.</p><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
 
 	$children = array(
-		'terms-of-use'         => array( 'Terms of Use', '<h2>Terms of Use</h2>' . $lorem ),
+		'terms-of-service'     => array( 'Terms of Service', '<h2>Terms of Service</h2>' . $lorem ),
 		'privacy-policy'       => array( 'Privacy Policy', '<h2>Privacy Policy</h2>' . $lorem ),
-		'shipping-returns'     => array( 'Shipping & Returns', '<h2>Shipping &amp; Returns</h2>' . $lorem ),
+		'shipping-policy'      => array( 'Shipping Policy', '<h2>Shipping Policy</h2>' . $lorem ),
 		'compliance-statement' => array( 'Compliance Statement', '<div class="legal-highlight"><h3>Mandatory Research-Use Acknowledgment</h3><p>All products are sold strictly for in-vitro laboratory research only and are NOT for human or veterinary use.</p></div><h2>Compliance Statement</h2>' . $lorem ),
 	);
 
-	// Top-level pages (so /terms-of-use/ etc. resolve by slug); grouped via the legal nav.
+	// Top-level pages (so /terms-of-service/ etc. resolve by slug); grouped via the legal nav.
 	unset( $legal_id );
 	$order = 1;
 	foreach ( $children as $slug => $data ) {
