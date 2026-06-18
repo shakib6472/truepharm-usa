@@ -70,37 +70,9 @@
 		});
 	}
 
-	function initCopy() {
-		var copyBtn = document.getElementById('tp-copy-referral');
-		if (!copyBtn) {
-			return;
-		}
-		copyBtn.addEventListener('click', function () {
-			var code = copyBtn.getAttribute('data-code') || '';
-			var done = function () {
-				var original = copyBtn.textContent;
-				copyBtn.textContent = 'Copied!';
-				setTimeout(function () {
-					copyBtn.textContent = original;
-				}, 1500);
-			};
-			if (navigator.clipboard && navigator.clipboard.writeText) {
-				navigator.clipboard.writeText(code).then(done).catch(done);
-			} else {
-				var tmp = document.createElement('textarea');
-				tmp.value = code;
-				document.body.appendChild(tmp);
-				tmp.select();
-				try { document.execCommand('copy'); } catch (e) {}
-				document.body.removeChild(tmp);
-				done();
-			}
-		});
-	}
-
 	function init() {
 		initRedeem();
-		initCopy();
+		// Copy-to-clipboard is handled globally by main.js (.tp-copy-btn).
 	}
 
 	if (document.readyState === 'loading') {

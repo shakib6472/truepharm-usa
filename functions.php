@@ -86,8 +86,10 @@ $truepharm_includes = array(
 	'inc/bundle-pricing.php',   // Quantity-based per-product bundle discounts.
 	'inc/rewards.php',          // Custom rewards points engine.
 	'inc/newsletter.php',       // Newsletter capture (custom table + AJAX).
+	'inc/contact-form.php',     // Contact form (custom table + AJAX + email).
 	'inc/turnstile.php',        // Cloudflare Turnstile placeholder hooks.
 	'inc/entrance-gate.php',    // Age / compliance entrance gate.
+	'inc/theme-activation.php', // One-time activation setup.
 );
 
 foreach ( $truepharm_includes as $truepharm_include ) {

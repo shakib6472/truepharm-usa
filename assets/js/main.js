@@ -249,6 +249,136 @@
 	}
 
 	/* -----------------------------------------------------------------
+	 * 6. FAQ accordion + sidebar smooth scroll
+	 * --------------------------------------------------------------- */
+	function initFaq() {
+		var questions = document.querySelectorAll('.faq-question');
+		questions.forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var item = btn.closest('.faq-item');
+				var answer = item ? item.querySelector('.faq-answer') : null;
+				if (!item || !answer) {
+					return;
+				}
+				var isOpen = item.classList.toggle('active');
+				btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+				answer.style.maxHeight = isOpen ? (answer.scrollHeight + 'px') : '';
+			});
+		});
+
+		var navLinks = document.querySelectorAll('.faq-nav a');
+		navLinks.forEach(function (link) {
+			link.addEventListener('click', function (e) {
+				var id = link.getAttribute('href');
+				if (!id || id.charAt(0) !== '#') {
+					return;
+				}
+				var target = document.querySelector(id);
+				if (!target) {
+					return;
+				}
+				e.preventDefault();
+				navLinks.forEach(function (l) { l.classList.remove('active'); });
+				link.classList.add('active');
+				var top = target.getBoundingClientRect().top + window.pageYOffset - 100;
+				window.scrollTo({ top: top, behavior: 'smooth' });
+			});
+		});
+	}
+
+	/* -----------------------------------------------------------------
+	 * 7. Contact form (AJAX)
+	 * --------------------------------------------------------------- */
+	function initContact() {
+		var form = document.getElementById('tp-contact-form');
+		var ajax = window.tp_ajax || {};
+		if (!form || !ajax.ajax_url) {
+			return;
+		}
+		var msg = document.getElementById('tp-contact-msg');
+		var button = form.querySelector('button[type="submit"]');
+
+		function setMessage(text, type) {
+			if (!msg) {
+				return;
+			}
+			msg.textContent = text;
+			msg.className = 'contact-msg ' + (type || '');
+		}
+
+		form.addEventListener('submit', function (e) {
+			e.preventDefault();
+			if (button) {
+				button.disabled = true;
+			}
+			setMessage('', '');
+
+			var data = new URLSearchParams();
+			data.append('action', 'tp_submit_contact');
+			data.append('nonce', ajax.nonce || '');
+			['first_name', 'last_name', 'email', 'order_number', 'subject', 'message'].forEach(function (name) {
+				var field = form.querySelector('[name="' + name + '"]');
+				data.append(name, field ? field.value : '');
+			});
+			var token = form.querySelector('[name="cf-turnstile-response"]');
+			if (token) {
+				data.append('cf-turnstile-response', token.value);
+			}
+
+			fetch(ajax.ajax_url, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: data.toString()
+			})
+				.then(function (res) { return res.json(); })
+				.then(function (resp) {
+					if (resp && resp.success) {
+						setMessage(resp.data && resp.data.message ? resp.data.message : 'Message sent.', 'success');
+						form.reset();
+					} else {
+						setMessage(resp && resp.data && resp.data.message ? resp.data.message : 'Something went wrong.', 'error');
+					}
+				})
+				.catch(function () {
+					setMessage('Something went wrong. Please try again.', 'error');
+				})
+				.finally(function () {
+					if (button) {
+						button.disabled = false;
+					}
+				});
+		});
+	}
+
+	/* -----------------------------------------------------------------
+	 * 8. Copy-to-clipboard buttons (.tp-copy-btn[data-code])
+	 * --------------------------------------------------------------- */
+	function initCopyButtons() {
+		document.querySelectorAll('.tp-copy-btn').forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var code = btn.getAttribute('data-code') || '';
+				var done = function () {
+					var original = btn.textContent;
+					btn.textContent = 'Copied!';
+					setTimeout(function () { btn.textContent = original; }, 1500);
+				};
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(code).then(done).catch(done);
+				} else {
+					var tmp = document.createElement('textarea');
+					tmp.value = code;
+					document.body.appendChild(tmp);
+					tmp.select();
+					try { document.execCommand('copy'); } catch (err) {}
+					document.body.removeChild(tmp);
+					done();
+				}
+			});
+		});
+	}
+
+	/* -----------------------------------------------------------------
 	 * Boot
 	 * --------------------------------------------------------------- */
 	function init() {
@@ -257,6 +387,9 @@
 		initCart();
 		initCarousel();
 		initNewsletter();
+		initFaq();
+		initContact();
+		initCopyButtons();
 	}
 
 	if (document.readyState === 'loading') {

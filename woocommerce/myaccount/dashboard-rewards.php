@@ -65,7 +65,7 @@ $tp_step    = TP_REWARDS_REDEEM_STEP;
 	</div>
 	<div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
 		<div class="referral-code" id="tp-referral-code"><?php echo esc_html( $tp_code ); ?></div>
-		<button type="button" class="btn-view" id="tp-copy-referral" data-code="<?php echo esc_attr( $tp_code ); ?>"><?php esc_html_e( 'Copy', 'truepharm' ); ?></button>
+		<button type="button" class="btn-view tp-copy-btn" id="tp-copy-referral" data-code="<?php echo esc_attr( $tp_code ); ?>"><?php esc_html_e( 'Copy', 'truepharm' ); ?></button>
 	</div>
 </div>
 

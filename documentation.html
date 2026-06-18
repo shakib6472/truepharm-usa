@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TruePharm USA — Theme Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#15527e; --blue-deep:#2b7cc0; --sky:#7fb8e8; --warm:#d99a86;
+    --slate:#1e293b; --slate-soft:#475569; --line:#e2e8f0; --content:#f8fafc;
+    --code-bg:#0f172a; --green:#4ade80;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--slate);background:var(--content);line-height:1.65;}
+  h1,h2,h3,h4{font-family:'Montserrat',sans-serif;color:var(--navy);line-height:1.25;}
+  a{color:var(--blue-deep);}
+  code{font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;font-size:0.9em;background:#eef4fa;color:#0f3a5c;padding:1px 5px;border-radius:4px;}
+
+  /* Sidebar */
+  .sidebar{position:fixed;top:0;left:0;width:260px;height:100vh;background:#1e293b;color:#cbd5e1;display:flex;flex-direction:column;overflow-y:auto;z-index:100;}
+  .sidebar .brand{padding:24px 22px 14px;}
+  .sidebar .brand strong{font-family:'Montserrat';font-weight:800;color:#fff;font-size:1.15rem;display:block;}
+  .sidebar .brand span{color:var(--warm);}
+  .sidebar .brand small{color:#94a3b8;font-size:0.72rem;display:block;margin-top:4px;}
+  .sidebar .search{padding:0 18px 14px;}
+  .sidebar .search input{width:100%;padding:9px 12px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-family:'Inter';font-size:0.85rem;outline:none;}
+  .sidebar .search input:focus{border-color:var(--warm);}
+  .sidebar nav{padding:0 10px 30px;}
+  .sidebar nav a{display:block;padding:8px 12px;color:#cbd5e1;text-decoration:none;font-size:0.86rem;border-radius:6px;font-weight:500;transition:.15s;}
+  .sidebar nav a:hover{background:#334155;color:#fff;}
+  .sidebar nav a.active{background:rgba(217,154,134,.16);color:var(--warm);font-weight:700;}
+  .sidebar nav a.hidden{display:none;}
+
+  /* Content */
+  .content{margin-left:260px;padding:0 0 80px;}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);padding:20px 40px;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .topbar h1{margin:0;font-size:1.5rem;}
+  .verbadge{font-family:'Montserrat';font-weight:700;font-size:0.72rem;background:var(--navy);color:#fff;padding:6px 12px;border-radius:30px;letter-spacing:.03em;}
+  .inner{padding:10px 40px;max-width:1080px;}
+
+  .doc-section{border-bottom:1px solid var(--line);}
+  details{padding:14px 0;}
+  summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;}
+  summary::-webkit-details-marker{display:none;}
+  summary::before{content:"▸";color:var(--warm);font-size:0.9rem;transition:transform .2s;}
+  details[open] summary::before{transform:rotate(90deg);}
+  summary h2{margin:0;font-size:1.35rem;}
+  .section-body{padding:8px 4px 18px 24px;}
+
+  p{margin:0 0 14px;}
+  ul{margin:0 0 14px;padding-left:22px;}
+  li{margin-bottom:6px;}
+
+  table{border-collapse:collapse;width:100%;margin:0 0 20px;font-size:0.88rem;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;font-family:'Montserrat';font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:.03em;}
+  td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:#f1f5f9;}
+
+  .code{position:relative;margin:0 0 20px;}
+  .code pre{background:var(--code-bg);color:#e2e8f0;padding:18px 18px;border-radius:8px;overflow-x:auto;font-family:'SFMono-Regular',Consolas,monospace;font-size:0.82rem;line-height:1.6;margin:0;}
+  .code pre code{background:none;color:inherit;padding:0;}
+  .copy{position:absolute;top:10px;right:10px;background:#334155;color:#e2e8f0;border:none;border-radius:5px;padding:5px 10px;font-size:0.72rem;font-family:'Montserrat';font-weight:600;cursor:pointer;opacity:.85;}
+  .copy:hover{background:var(--warm);color:#2b140e;opacity:1;}
+  .tok-hook{color:#f0b8a6;} .tok-fn{color:#7fb8e8;} .tok-str{color:var(--green);} .tok-com{color:#64748b;font-style:italic;} .tok-key{color:#c792ea;}
+
+  .badge{display:inline-block;font-family:'Montserrat';font-weight:700;font-size:0.66rem;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:20px;color:#fff;}
+  .badge-action{background:var(--blue-deep);}
+  .badge-filter{background:var(--warm);color:#2b140e;}
+  .badge-ajax{background:var(--navy);}
+
+  .note{background:#eef4fa;border-left:4px solid var(--blue-deep);padding:12px 16px;border-radius:0 8px 8px 0;margin:0 0 18px;font-size:0.9rem;}
+
+  @media(max-width:768px){
+    .sidebar{position:relative;width:100%;height:auto;}
+    .sidebar nav{display:flex;flex-wrap:wrap;gap:4px;}
+    .sidebar nav a{font-size:0.78rem;padding:6px 10px;}
+    .content{margin-left:0;}
+    .topbar,.inner{padding-left:20px;padding-right:20px;}
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <strong>TruePharm<span> USA</span></strong>
+    <small>Theme Documentation</small>
+  </div>
+  <div class="search">
+    <input type="search" id="docSearch" placeholder="Search docs…" aria-label="Search documentation">
+  </div>
+  <nav id="docNav">
+    <a href="#overview">1. Overview</a>
+    <a href="#structure">2. File Structure</a>
+    <a href="#design">3. Design System</a>
+    <a href="#templates">4. Template Reference</a>
+    <a href="#coa">5. COA Library CPT</a>
+    <a href="#woofields">6. WooCommerce Fields</a>
+    <a href="#rewards">7. Rewards Engine</a>
+    <a href="#actions">8. Action Hooks</a>
+    <a href="#filters">9. Filter Hooks</a>
+    <a href="#ajax">10. AJAX Endpoints</a>
+    <a href="#customizer">11. Customizer Settings</a>
+    <a href="#turnstile">12. Turnstile</a>
+    <a href="#newsletter">13. Newsletter</a>
+    <a href="#contact">14. Contact Form</a>
+    <a href="#gate">15. Entrance Gate</a>
+    <a href="#js">16. JavaScript Files</a>
+    <a href="#modref">17. Customizer Quick Ref</a>
+    <a href="#clientguide">18. Client Guide</a>
+  </nav>
+</aside>
+
+<div class="content">
+  <div class="topbar">
+    <h1>TruePharm USA — Theme Docs</h1>
+    <span class="verbadge">v1.0 · WP 7.0 · WC 10.8.1 · PHP 8.0+</span>
+  </div>
+  <div class="inner" id="docBody">
+
+  <!-- 1 -->
+  <section class="doc-section" id="overview"><details open><summary><h2>1. Theme Overview</h2></summary><div class="section-body">
+    <table><tbody>
+      <tr><th>Name</th><td>TruePharm USA</td></tr>
+      <tr><th>Version</th><td>1.0.0</td></tr>
+      <tr><th>Author</th><td>TruePharm USA <em>(placeholder — edit in style.css header)</em></td></tr>
+      <tr><th>Text Domain</th><td><code>truepharm</code></td></tr>
+      <tr><th>Requires</th><td>WordPress 6.5+ (tested 7.0) · WooCommerce 8.0+ (tested 10.8.1) · PHP 8.0+</td></tr>
+    </tbody></table>
+    <p>A pure custom WooCommerce theme — no page builders, no CSS frameworks, no ACF. Custom data uses native <code>register_post_type()</code>, <code>register_post_meta()</code>, and <code>add_meta_box()</code>.</p>
+    <h3>Installation</h3>
+    <ul>
+      <li><strong>Appearance → Themes → Add New → Upload Theme</strong>, choose <code>truepharm-usa.zip</code>, Install, Activate.</li>
+      <li><strong>Settings → Permalinks → Save Changes</strong> (flushes rewrite rules).</li>
+      <li>Activate <strong>WooCommerce</strong> if needed.</li>
+      <li><strong>Appearance → Menus</strong> → assign a menu to <em>Primary Menu (slide-in panel)</em>.</li>
+    </ul>
+    <h3>Activation auto-creates</h3>
+    <p>The <code>after_switch_theme</code> hook (<code>truepharm_activate()</code> in <code>inc/theme-activation.php</code>) runs once and:</p>
+    <ul>
+      <li>Flushes rewrite rules (COA archive + <code>rewards</code> endpoint).</li>
+      <li>Creates tables <code>{prefix}_tp_newsletter_emails</code> &amp; <code>{prefix}_tp_contact_submissions</code>.</li>
+      <li>Sets WC options: <code>woocommerce_coming_soon=no</code>, <code>enable_myaccount_registration=yes</code>, <code>registration_generate_password=no</code>, <code>registration_generate_username=yes</code>.</li>
+      <li>Schedules the daily <code>tp_birthday_check</code> cron.</li>
+      <li>Creates &amp; template-assigns pages: why-us, faq, contact-us, rewards-program, legal, terms-of-use, privacy-policy, shipping-returns, compliance-statement.</li>
+    </ul>
+  </div></details></section>
+
+  <!-- 2 -->
+  <section class="doc-section" id="structure"><details open><summary><h2>2. File Structure</h2></summary><div class="section-body">
+    <div class="code"><button class="copy">Copy</button><pre><code>truepharm-usa/
+&#9500; style.css                 Theme header + full design system
+&#9500; functions.php             Bootstrap, includes loader, cart badge, WC wrappers, rewards endpoint
+&#9500; index.php / page.php       Fallback + generic page templates
+&#9500; front-page.php            Homepage (hero, creds, categories, carousel, goals, rewards, newsletter)
+&#9500; header.php / footer.php    Global header (nav + gate hook) and footer
+&#9500; 404.php / search.php / searchform.php
+&#9500; archive-product.php       Shop (sidebar filters + grid)
+&#9500; single-product.php        Product (variant pills, bundle, tabs, related)
+&#9500; archive-coa_library.php   COA archive (search table)
+&#9500; single-coa_library.php    Single COA (PDF viewer + download)
+&#9500; page-why-us.php / page-faq.php / page-contact.php / page-rewards.php / page-legal.php
+&#9500; screenshot.png
+&#9500; assets/js/  main.js  product.js  rewards.js  coa-filter.js  admin-coa.js
+&#9500; inc/  enqueue.php  customizer.php  cpt-coa.php  woo-product-fields.php
+&#9474;       bundle-pricing.php  rewards.php  newsletter.php  contact-form.php
+&#9474;       turnstile.php  entrance-gate.php  theme-activation.php
+&#9492; woocommerce/
+    &#9500; checkout/form-checkout.php
+    &#9492; myaccount/  my-account.php  navigation.php  form-login.php  dashboard.php
+                   orders.php  my-address.php  dashboard-rewards.php</code></pre></div>
+    <p>Plus <code>DOCUMENTATION.md</code> and <code>documentation.html</code> (this file).</p>
+  </div></details></section>
+
+  <!-- 3 -->
+  <section class="doc-section" id="design"><details open><summary><h2>3. Design System</h2></summary><div class="section-body">
+    <h3>CSS Variables (<code>:root</code>)</h3>
+    <table><thead><tr><th>Variable</th><th>Value</th><th>Used for</th></tr></thead><tbody>
+      <tr><td><code>--bg</code> / <code>--bg-card</code></td><td>#ffffff</td><td>Page / card backgrounds</td></tr>
+      <tr><td><code>--blue</code></td><td>#7fb8e8</td><td>Light blue accents, metallic blue stop</td></tr>
+      <tr><td><code>--blue-deep</code></td><td>#2b7cc0</td><td>Primary buttons, links, focus</td></tr>
+      <tr><td><code>--navy</code></td><td>#15527e</td><td>Headings, nav, navy buttons, prices</td></tr>
+      <tr><td><code>--sky</code> / <code>--sky-edge</code></td><td>#d6e8f9 / #bcd9f3</td><td>Sky sections, batch tags, page headers</td></tr>
+      <tr><td><code>--warm</code></td><td>#d99a86</td><td>Rose gold accents, active states, eyebrow</td></tr>
+      <tr><td><code>--warm-soft</code></td><td>#f7e4dc</td><td>Pale rose-gold section backgrounds</td></tr>
+      <tr><td><code>--slate</code> / <code>--slate-soft</code></td><td>#1e293b / #475569</td><td>Body text / secondary text</td></tr>
+      <tr><td><code>--line</code></td><td>#e2e8f0</td><td>Borders, dividers</td></tr>
+      <tr><td><code>--radius</code> / <code>--maxw</code></td><td>12px / 1200px</td><td>Border radius / max content width</td></tr>
+    </tbody></table>
+    <h3>Typography</h3>
+    <ul><li><strong>Montserrat</strong> 500–900 — headings, buttons, eyebrows, badges.</li>
+    <li><strong>Inter</strong> 400–600 — body, forms, tables.</li></ul>
+    <p>Both via Google Fonts CDN (handle <code>truepharm-fonts</code>) with preconnect resource hints.</p>
+    <h3>Buttons</h3>
+    <table><thead><tr><th>Class</th><th>Use</th></tr></thead><tbody>
+      <tr><td><code>.btn</code> / <code>.btn-cart</code> / <code>.btn-ghost</code> / <code>.btn-white</code></td><td>Base blue / navy / ghost / white buttons</td></tr>
+      <tr><td><code>.btn-navy</code></td><td>Full-width navy submit (login)</td></tr>
+      <tr><td><code>.btn-add</code> / <code>.btn-view</code> / <code>.btn-edit</code></td><td>Card add-to-cart / dashboard pill / address edit</td></tr>
+      <tr><td><code>.btn-pdf</code> (+<code>.btn-pdf-lg</code>)</td><td>Rose-gold COA buttons</td></tr>
+    </tbody></table>
+    <h3>Metallic buttons</h3>
+    <table><thead><tr><th>Class</th><th>Where</th></tr></thead><tbody>
+      <tr><td><code>.btn-buy</code> + <code>.metallic-text</code></td><td>Blue metallic — product "Add to Cart"</td></tr>
+      <tr><td><code>.btn-bundle</code> + <code>.metallic-text-warm</code></td><td>Rose gold — "Add Bundle to Cart"</td></tr>
+      <tr><td><code>.btn-agree</code> / <code>.btn-exit</code></td><td>Entrance gate agree / disagree</td></tr>
+      <tr><td><code>.btn-rosegold</code></td><td>COA tab, register, redeem, contact submit</td></tr>
+      <tr><td><code>.best-value-badge</code></td><td>Metallic "Best Value" bundle pill</td></tr>
+    </tbody></table>
+    <h3>Animation &amp; layout helpers</h3>
+    <ul>
+      <li><code>.reveal</code> → <code>.reveal.in</code> — scroll reveal (IntersectionObserver in main.js); disabled under <code>prefers-reduced-motion</code>.</li>
+      <li><code>.ring.r1–r4</code>, <code>.base-ring.b1–b3</code>, <code>.glow</code> — hero pulsating rings (<code>@keyframes ringPulse</code>).</li>
+      <li><code>.wrap</code> (1200px container), <code>.ph-img</code> (placeholder), <code>.eyebrow</code> (rose-gold gradient label), <code>.compliance-badge</code> ("Research Only").</li>
+    </ul>
+  </div></details></section>
+
+  <!-- 4 -->
+  <section class="doc-section" id="templates"><details open><summary><h2>4. Template Reference</h2></summary><div class="section-body">
+    <table><thead><tr><th>Template</th><th>Handles</th><th>Customizer keys</th><th>Theme helpers</th></tr></thead><tbody>
+      <tr><td>front-page.php</td><td>Front page</td><td>hero_mission, goals_title, goals_p1/p2, goals_image</td><td>tp_get_molecular_class, tp_get_product_form, tp_rewards_* accessors</td></tr>
+      <tr><td>header.php</td><td>Global header</td><td>topbar_left/center/right</td><td>truepharm_cart_badge_html, truepharm_primary_menu_fallback</td></tr>
+      <tr><td>footer.php</td><td>Global footer</td><td>footer_tagline, legal_disclaimer</td><td>—</td></tr>
+      <tr><td>archive-product.php</td><td>Shop + product cats</td><td>—</td><td>tp_product_card</td></tr>
+      <tr><td>single-product.php</td><td>/product/…</td><td>—</td><td>tp_get_product_form, tp_product_card, TP_PF_*</td></tr>
+      <tr><td>archive-coa_library.php</td><td>/coa-library/</td><td>—</td><td>TP_COA_*</td></tr>
+      <tr><td>single-coa_library.php</td><td>Single COA</td><td>—</td><td>TP_COA_*</td></tr>
+      <tr><td>page-why-us.php</td><td>/why-us/</td><td>why_heading, why_p1/p2/p3, why_step1–4, why_image</td><td>—</td></tr>
+      <tr><td>page-faq.php</td><td>/faq/</td><td>—</td><td>—</td></tr>
+      <tr><td>page-contact.php</td><td>/contact-us/</td><td>contact_email/phone/address</td><td>do_action('tp_turnstile_widget')</td></tr>
+      <tr><td>page-rewards.php</td><td>/rewards-program/</td><td>—</td><td>tp_rewards_* accessors, tp_rewards_get_referral_code, TP_REWARDS_*</td></tr>
+      <tr><td>page-legal.php</td><td>legal + 4 policy pages</td><td>—</td><td>get_page_by_path, the_content</td></tr>
+      <tr><td>myaccount/dashboard.php</td><td>Overview tab</td><td>—</td><td>tp_rewards_get_balance, truepharm_order_status_tag</td></tr>
+      <tr><td>myaccount/orders.php</td><td>Orders tab (10/pg)</td><td>—</td><td>truepharm_order_status_tag</td></tr>
+      <tr><td>myaccount/my-address.php</td><td>Addresses tab</td><td>—</td><td>WC_Customer, wc_get_account_formatted_address</td></tr>
+      <tr><td>myaccount/dashboard-rewards.php</td><td>rewards endpoint</td><td>—</td><td>tp_rewards_* (balance/ledger/value/referral)</td></tr>
+      <tr><td>myaccount/form-login.php</td><td>Login / Register</td><td>—</td><td>WC form hooks, tp_turnstile_widget</td></tr>
+      <tr><td>checkout/form-checkout.php</td><td>/checkout/</td><td>—</td><td>all woocommerce_checkout_* hooks</td></tr>
+      <tr><td>404.php / search.php</td><td>Not-found / search</td><td>—</td><td>tp_product_card (search)</td></tr>
+    </tbody></table>
+  </div></details></section>
+
+  <!-- 5 -->
+  <section class="doc-section" id="coa"><details open><summary><h2>5. Custom Post Type: COA Library</h2></summary><div class="section-body">
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-fn">register_post_type</span>( <span class="tok-str">'coa_library'</span>, [
+  <span class="tok-str">'public'</span>       =&gt; <span class="tok-key">true</span>,
+  <span class="tok-str">'show_in_rest'</span> =&gt; <span class="tok-key">false</span>,
+  <span class="tok-str">'has_archive'</span>  =&gt; <span class="tok-key">true</span>,
+  <span class="tok-str">'menu_icon'</span>    =&gt; <span class="tok-str">'dashicons-clipboard'</span>,
+  <span class="tok-str">'rewrite'</span>      =&gt; [ <span class="tok-str">'slug'</span> =&gt; <span class="tok-str">'coa-library'</span>, <span class="tok-str">'with_front'</span> =&gt; <span class="tok-key">false</span> ],
+  <span class="tok-str">'supports'</span>     =&gt; [ <span class="tok-str">'title'</span> ], <span class="tok-com">// compound name = post title</span>
+] );</code></pre></div>
+    <p><strong>Archive:</strong> <code>/coa-library/</code> · <strong>Single:</strong> <code>/coa-library/{slug}/</code></p>
+    <table><thead><tr><th>Constant</th><th>Meta key</th><th>Type</th><th>Sanitize</th></tr></thead><tbody>
+      <tr><td>TP_COA_BATCH</td><td><code>_coa_batch_number</code></td><td>string</td><td>sanitize_text_field</td></tr>
+      <tr><td>TP_COA_DATE</td><td><code>_coa_testing_date</code></td><td>string (date)</td><td>sanitize_text_field</td></tr>
+      <tr><td>TP_COA_PURITY</td><td><code>_coa_verified_purity</code></td><td>string</td><td>sanitize_text_field</td></tr>
+      <tr><td>TP_COA_PDF</td><td><code>_coa_pdf_file</code></td><td>integer (attachment ID)</td><td>absint</td></tr>
+    </tbody></table>
+    <p><strong>Admin columns:</strong> Batch Number · Testing Date (sortable) · Verified Purity · PDF (View PDF / No PDF). Meta box <em>"COA Details"</em>; PDF via <code>wp.media</code> (admin-coa.js); save verifies nonce <code>tp_coa_nonce</code>.</p>
+    <p><strong>Add a COA:</strong> COA Library → Add New → Title = compound name → fill Batch/Date/Purity → Select/Upload PDF → Publish.</p>
+  </div></details></section>
+
+  <!-- 6 -->
+  <section class="doc-section" id="woofields"><details open><summary><h2>6. WooCommerce Custom Fields</h2></summary><div class="section-body">
+    <table><thead><tr><th>Constant</th><th>Meta key</th><th>Label</th><th>Tab</th></tr></thead><tbody>
+      <tr><td>TP_PF_FORM</td><td><code>_tp_product_form</code></td><td>Form</td><td>General</td></tr>
+      <tr><td>TP_PF_CAS</td><td><code>_tp_cas_number</code></td><td>CAS Number</td><td>Chemical Data</td></tr>
+      <tr><td>TP_PF_FORMULA</td><td><code>_tp_molecular_formula</code></td><td>Molecular Formula</td><td>Chemical Data</td></tr>
+      <tr><td>TP_PF_WEIGHT</td><td><code>_tp_molecular_weight</code></td><td>Molecular Weight</td><td>Chemical Data</td></tr>
+      <tr><td>TP_PF_SEQUENCE</td><td><code>_tp_sequence</code></td><td>Sequence (textarea)</td><td>Chemical Data</td></tr>
+      <tr><td>TP_PF_PURITY</td><td><code>_tp_purity</code></td><td>Purity (HPLC)</td><td>Chemical Data</td></tr>
+      <tr><td>TP_PF_STORAGE</td><td><code>_tp_storage_info</code></td><td>Storage Information (textarea)</td><td>Storage &amp; Handling</td></tr>
+    </tbody></table>
+    <div class="note"><strong>Molecular Class</strong> is not a field — it is the product's first <code>product_cat</code> term (<code>tp_get_molecular_class()</code>).</div>
+    <h3>Vial Size variants</h3>
+    <p>Global attribute <code>pa_vial_size</code> (auto-created). Make the product <strong>Variable</strong>, add the <strong>Vial Size</strong> attribute &amp; values, check <em>Used for variations</em>, then set a price per variation. The product page renders them as <code>.variant-btn</code> pills.</p>
+    <h3>Bundle pricing</h3>
+    <table><thead><tr><th>Qty of same product</th><th>Discount</th></tr></thead><tbody>
+      <tr><td>3–4</td><td>5% off</td></tr>
+      <tr><td>5–9</td><td>10% off</td></tr>
+      <tr><td>10+</td><td>20% off</td></tr>
+    </tbody></table>
+    <p>Applied on <code>woocommerce_before_calculate_totals</code> (<code>tp_apply_bundle_pricing</code>), recalculated from <code>_price</code> meta so it never compounds.</p>
+  </div></details></section>
+
+  <!-- 7 -->
+  <section class="doc-section" id="rewards"><details open><summary><h2>7. Rewards Engine</h2></summary><div class="section-body">
+    <h3>Constants</h3>
+    <table><thead><tr><th>Constant</th><th>Value</th><th>Meaning</th></tr></thead><tbody>
+      <tr><td>TP_REWARDS_SIGNUP_POINTS</td><td>50</td><td>Awarded on signup</td></tr>
+      <tr><td>TP_REWARDS_POINTS_PER_DOLLAR</td><td>1</td><td>Points per $1 of order subtotal</td></tr>
+      <tr><td>TP_REWARDS_REVIEW_POINTS</td><td>100</td><td>Approved review (once per product)</td></tr>
+      <tr><td>TP_REWARDS_BIRTHDAY_POINTS</td><td>200</td><td>Annual birthday bonus</td></tr>
+      <tr><td>TP_REWARDS_REFERRAL_POINTS</td><td>200</td><td>To referrer on referee signup</td></tr>
+      <tr><td>TP_REWARDS_REFERRAL_DISCOUNT</td><td>20</td><td>Marketing "$ off" figure</td></tr>
+      <tr><td>TP_REWARDS_POINTS_VALUE</td><td>0.10</td><td>$ per point (100 pts = $10)</td></tr>
+      <tr><td>TP_REWARDS_REDEEM_STEP</td><td>100</td><td>Redemption increment / minimum</td></tr>
+    </tbody></table>
+    <h3>User meta</h3>
+    <table><thead><tr><th>Key</th><th>Type</th><th>Description</th></tr></thead><tbody>
+      <tr><td><code>tp_rewards_points</code></td><td>int</td><td>Balance</td></tr>
+      <tr><td><code>tp_rewards_ledger</code></td><td>array</td><td>[date, reason, points, balance]</td></tr>
+      <tr><td><code>tp_rewards_referral_code</code></td><td>string</td><td>Unique code</td></tr>
+      <tr><td><code>tp_rewards_referred_by</code></td><td>int</td><td>Referrer user ID</td></tr>
+      <tr><td><code>tp_rewards_birthday</code></td><td>string MM-DD</td><td>Birthday</td></tr>
+      <tr><td><code>tp_rewards_reviewed_products</code></td><td>array</td><td>Products already rewarded</td></tr>
+      <tr><td><code>tp_rewards_birthday_year</code></td><td>int</td><td>Last year awarded</td></tr>
+    </tbody></table>
+    <h3>Functions</h3>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-fn">tp_rewards_get_balance</span>( <span class="tok-key">int</span> $user_id = 0 ) : <span class="tok-key">int</span>
+<span class="tok-fn">tp_rewards_add_points</span>( <span class="tok-key">int</span> $user_id, <span class="tok-key">int</span> $points, <span class="tok-key">string</span> $reason ) : <span class="tok-key">bool</span>
+<span class="tok-fn">tp_rewards_deduct_points</span>( <span class="tok-key">int</span> $user_id, <span class="tok-key">int</span> $points, <span class="tok-key">string</span> $reason ) : <span class="tok-key">bool</span>  <span class="tok-com">// false if balance &lt; points</span>
+<span class="tok-fn">tp_rewards_get_ledger</span>( <span class="tok-key">int</span> $user_id = 0 ) : <span class="tok-key">array</span>
+<span class="tok-fn">tp_rewards_points_to_value</span>( <span class="tok-key">int</span> $points ) : <span class="tok-key">float</span>   <span class="tok-com">// $points * 0.10</span>
+<span class="tok-fn">tp_rewards_generate_referral_code</span>( <span class="tok-key">int</span> $user_id ) : <span class="tok-key">string</span>  <span class="tok-com">// TPUSA-{FIRST5LOGIN}{ID}</span>
+<span class="tok-fn">tp_rewards_get_referral_code</span>( <span class="tok-key">int</span> $user_id = 0 ) : <span class="tok-key">string</span></code></pre></div>
+    <h3>Auto-earn triggers</h3>
+    <table><thead><tr><th>Hook</th><th>Function</th><th>When</th></tr></thead><tbody>
+      <tr><td><span class="badge badge-action">action</span> user_register</td><td>tp_rewards_on_register</td><td>Signup points + referral resolution</td></tr>
+      <tr><td><span class="badge badge-action">action</span> woocommerce_order_status_completed</td><td>tp_rewards_on_order_completed</td><td>floor(subtotal) × 1, once</td></tr>
+      <tr><td><span class="badge badge-action">action</span> comment_post</td><td>tp_rewards_review_on_post</td><td>Approved product review</td></tr>
+      <tr><td><span class="badge badge-action">action</span> transition_comment_status</td><td>tp_rewards_review_on_status</td><td>Review approved later</td></tr>
+      <tr><td><span class="badge badge-action">action</span> tp_birthday_check</td><td>tp_rewards_birthday_check</td><td>Daily cron — birthday match</td></tr>
+    </tbody></table>
+    <h3>Redemption flow</h3>
+    <p><span class="badge badge-ajax">ajax</span> <code>tp_redeem_points</code> (logged-in) → validate multiple of 100 &amp; balance ≥ → create <code>WC_Coupon</code> <code>TP-REDEEM-{uid}-{ts}</code> (fixed_cart, single-use, +30d, email-restricted) → deduct points → return <code>{code, amount, balance, message}</code>.</p>
+    <h3>Referral &amp; birthday</h3>
+    <p><code>?ref=CODE</code> → <code>tp_rewards_capture_referral</code> (init) sets the <code>tp_referral_code</code> cookie (30 days) → resolved on <code>user_register</code>. Birthday cron <code>tp_birthday_check</code> scheduled daily; guarded by <code>tp_rewards_birthday_year</code>.</p>
+  </div></details></section>
+
+  <!-- 8 -->
+  <section class="doc-section" id="actions"><details open><summary><h2>8. Action Hooks <span class="badge badge-action">do_action</span></h2></summary><div class="section-body">
+    <table><thead><tr><th>Hook</th><th>File</th><th>When</th><th>Purpose</th></tr></thead><tbody>
+      <tr><td>truepharm_entrance_gate</td><td>header.php</td><td>After body open</td><td>Placeholder (gate renders on wp_footer)</td></tr>
+      <tr><td>tp_turnstile_widget</td><td>functions / form-login / page-contact</td><td>At CAPTCHA slots</td><td>Renders Turnstile widget/placeholder</td></tr>
+      <tr><td>tp_rewards_points_added</td><td>inc/rewards.php</td><td>After add</td><td>Extensibility</td></tr>
+      <tr><td>tp_rewards_points_deducted</td><td>inc/rewards.php</td><td>After deduct</td><td>Extensibility</td></tr>
+      <tr><td>tp_newsletter_subscribed</td><td>inc/newsletter.php</td><td>After save</td><td>Email-tool sync</td></tr>
+      <tr><td>tp_contact_submitted</td><td>inc/contact-form.php</td><td>After save+email</td><td>Extensibility</td></tr>
+      <tr><td>tp_birthday_check</td><td>WP-Cron</td><td>Daily</td><td>Birthday award routine</td></tr>
+    </tbody></table>
+  </div></details></section>
+
+  <!-- 9 -->
+  <section class="doc-section" id="filters"><details open><summary><h2>9. Filter Hooks <span class="badge badge-filter">add_filter</span></h2></summary><div class="section-body">
+    <table><thead><tr><th>Hook</th><th>File</th><th>Priority</th><th>Purpose</th></tr></thead><tbody>
+      <tr><td>get_custom_logo</td><td>functions.php</td><td>10</td><td>Add .logo-img class</td></tr>
+      <tr><td>woocommerce_add_to_cart_fragments</td><td>functions.php</td><td>10</td><td>Live cart-count badge</td></tr>
+      <tr><td>woocommerce_account_menu_items</td><td>functions.php</td><td>10</td><td>Insert Rewards menu item</td></tr>
+      <tr><td>woocommerce_my_account_my_orders_query</td><td>functions.php</td><td>10</td><td>10 orders/page</td></tr>
+      <tr><td>woocommerce_registration_errors</td><td>functions.php</td><td>10</td><td>Require compliance checkbox</td></tr>
+      <tr><td>woocommerce_registration_errors</td><td>inc/turnstile.php</td><td>10</td><td>Turnstile verify (register)</td></tr>
+      <tr><td>wp_authenticate_user</td><td>inc/turnstile.php</td><td>10</td><td>Turnstile verify (login)</td></tr>
+      <tr><td>tp_contact_form_validate</td><td>inc/turnstile.php</td><td>10</td><td>Turnstile verify (contact)</td></tr>
+      <tr><td>woocommerce_product_data_tabs</td><td>inc/woo-product-fields.php</td><td>10</td><td>Add Chemical Data + Storage tabs</td></tr>
+      <tr><td>wp_resource_hints</td><td>inc/enqueue.php</td><td>10</td><td>Preconnect Google Fonts</td></tr>
+    </tbody></table>
+    <div class="note"><strong>Theme-provided filters:</strong> <code>tp_gate_should_show</code>, <code>tp_gate_exit_url</code>, <code>tp_rewards_signup_bonus</code>, <code>tp_rewards_points_per_dollar</code>, <code>tp_rewards_redeem_points</code>, <code>tp_contact_form_validate</code>.</div>
+  </div></details></section>
+
+  <!-- 10 -->
+  <section class="doc-section" id="ajax"><details open><summary><h2>10. AJAX Endpoints <span class="badge badge-ajax">ajax</span></h2></summary><div class="section-body">
+    <table><thead><tr><th>Action</th><th>Handler</th><th>Auth</th><th>Params</th><th>Response</th></tr></thead><tbody>
+      <tr><td>tp_newsletter</td><td>tp_newsletter_subscribe</td><td>Public</td><td>nonce, email</td><td>{success, data.message}</td></tr>
+      <tr><td>tp_submit_contact</td><td>tp_submit_contact</td><td>Public</td><td>nonce, first_name, last_name, email, order_number, subject, message, cf-turnstile-response</td><td>{success, data.message}</td></tr>
+      <tr><td>tp_redeem_points</td><td>tp_rewards_redeem</td><td><strong>Logged-in</strong></td><td>nonce, points_to_redeem</td><td>{code, amount, balance, message}</td></tr>
+      <tr><td>tp_set_gate_cookie</td><td>tp_set_gate_cookie</td><td>Public</td><td>nonce (tp_gate)</td><td>{success}</td></tr>
+    </tbody></table>
+    <p>Public AJAX uses the <code>tp_ajax</code> nonce; the gate uses its own <code>tp_gate</code> nonce.</p>
+  </div></details></section>
+
+  <!-- 11 -->
+  <section class="doc-section" id="customizer"><details open><summary><h2>11. Customizer Settings</h2></summary><div class="section-body">
+    <table><thead><tr><th>Section</th><th>Key</th><th>Type</th><th>Default</th></tr></thead><tbody>
+      <tr><td>Top Bar</td><td>truepharm_topbar_left</td><td>text</td><td>Secure Checkout</td></tr>
+      <tr><td>Top Bar</td><td>truepharm_topbar_center</td><td>text</td><td>Authorized Clinical Research Formulas</td></tr>
+      <tr><td>Top Bar</td><td>truepharm_topbar_right</td><td>text</td><td>Free Priority Logistics on Orders $200+</td></tr>
+      <tr><td>Homepage</td><td>truepharm_hero_mission</td><td>textarea</td><td>(brief hero mission)</td></tr>
+      <tr><td>Homepage</td><td>truepharm_goals_title</td><td>text</td><td>Pioneering Cellular Integrity</td></tr>
+      <tr><td>Homepage</td><td>truepharm_goals_p1 / _p2</td><td>textarea</td><td>(brief paragraphs)</td></tr>
+      <tr><td>Homepage</td><td>truepharm_goals_image</td><td>media</td><td>(none)</td></tr>
+      <tr><td>Why Us</td><td>truepharm_why_heading</td><td>text</td><td>Research demands precision…</td></tr>
+      <tr><td>Why Us</td><td>truepharm_why_p1/p2/p3</td><td>textarea</td><td>(brief paragraphs)</td></tr>
+      <tr><td>Why Us</td><td>truepharm_why_step1–4</td><td>textarea</td><td>(pipeline steps)</td></tr>
+      <tr><td>Why Us</td><td>truepharm_why_image</td><td>media</td><td>(none)</td></tr>
+      <tr><td>Contact</td><td>truepharm_contact_email</td><td>email</td><td>info@truepharmusa.com</td></tr>
+      <tr><td>Contact</td><td>truepharm_contact_phone</td><td>text</td><td>(empty)</td></tr>
+      <tr><td>Contact</td><td>truepharm_contact_address</td><td>textarea</td><td>(empty)</td></tr>
+      <tr><td>Footer</td><td>truepharm_footer_tagline</td><td>textarea</td><td>USA-synthesized…</td></tr>
+      <tr><td>Footer</td><td>truepharm_legal_disclaimer</td><td>textarea</td><td>(FDA disclaimer)</td></tr>
+      <tr><td>Cloudflare Turnstile</td><td>tp_turnstile_site_key / _secret_key</td><td>text</td><td>(empty)</td></tr>
+    </tbody></table>
+  </div></details></section>
+
+  <!-- 12 -->
+  <section class="doc-section" id="turnstile"><details open><summary><h2>12. Turnstile Integration</h2></summary><div class="section-body">
+    <p><code>do_action('tp_turnstile_widget')</code> → <code>tp_turnstile_render_widget()</code>: renders the live <code>.cf-turnstile</code> widget + loads Cloudflare's <code>api.js</code> when both keys are set; otherwise shows <code>.tp-turnstile-placeholder</code>.</p>
+    <p><strong>Activate:</strong> Appearance → Customize → Cloudflare Turnstile → paste Site Key + Secret Key.</p>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-fn">tp_turnstile_verify</span>( <span class="tok-key">string</span> $token = <span class="tok-str">''</span> ) : <span class="tok-key">bool</span>  <span class="tok-com">// true (pass-through) when unconfigured</span></code></pre></div>
+    <table><thead><tr><th>Form</th><th>Hook</th><th>Function</th></tr></thead><tbody>
+      <tr><td>Register</td><td>woocommerce_registration_errors</td><td>tp_turnstile_validate_registration</td></tr>
+      <tr><td>Login (WC)</td><td>wp_authenticate_user</td><td>tp_turnstile_validate_login</td></tr>
+      <tr><td>Checkout</td><td>woocommerce_checkout_process</td><td>tp_turnstile_validate_checkout</td></tr>
+      <tr><td>Contact</td><td>tp_contact_form_validate</td><td>tp_turnstile_validate_contact</td></tr>
+    </tbody></table>
+  </div></details></section>
+
+  <!-- 13 -->
+  <section class="doc-section" id="newsletter"><details open><summary><h2>13. Newsletter System</h2></summary><div class="section-body">
+    <p><strong>Table</strong> <code>{prefix}_tp_newsletter_emails</code>: id, email (unique), ip_address, source, created_at.</p>
+    <p><span class="badge badge-ajax">ajax</span> <code>tp_newsletter</code> → <code>tp_newsletter_subscribe</code> (validates email, blocks dupes, fires <code>tp_newsletter_subscribed</code>).</p>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-key">SELECT</span> email, created_at <span class="tok-key">FROM</span> wp_tp_newsletter_emails <span class="tok-key">ORDER BY</span> created_at <span class="tok-key">DESC</span>;</code></pre></div>
+  </div></details></section>
+
+  <!-- 14 -->
+  <section class="doc-section" id="contact"><details open><summary><h2>14. Contact Form</h2></summary><div class="section-body">
+    <p><strong>Table</strong> <code>{prefix}_tp_contact_submissions</code>: id, name, email, order_number, subject, message, submitted_at.</p>
+    <p><span class="badge badge-ajax">ajax</span> <code>tp_submit_contact</code> → runs <code>apply_filters('tp_contact_form_validate', new WP_Error())</code> (Turnstile), validates required fields, inserts the row, and emails <code>get_option('admin_email')</code> with Reply-To set to the sender.</p>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-key">SELECT</span> * <span class="tok-key">FROM</span> wp_tp_contact_submissions <span class="tok-key">ORDER BY</span> submitted_at <span class="tok-key">DESC</span>;</code></pre></div>
+  </div></details></section>
+
+  <!-- 15 -->
+  <section class="doc-section" id="gate"><details open><summary><h2>15. Entrance Gate</h2></summary><div class="section-body">
+    <p><strong>Cookie:</strong> <code>tp_compliance_agreed</code> (<code>TP_GATE_COOKIE</code>), 30 days (<code>TP_GATE_COOKIE_DAYS</code>). Renders via <code>tp_render_entrance_gate</code> on <code>wp_footer</code> when the cookie is absent (not in admin).</p>
+    <p><span class="badge badge-ajax">ajax</span> <code>tp_set_gate_cookie</code> (nonce <code>tp_gate</code>) sets the cookie. "Disagree" redirects to <code>apply_filters('tp_gate_exit_url', 'https://www.google.com')</code>.</p>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-com">// Disable the gate entirely:</span>
+<span class="tok-fn">add_filter</span>( <span class="tok-str">'tp_gate_should_show'</span>, <span class="tok-str">'__return_false'</span> );</code></pre></div>
+  </div></details></section>
+
+  <!-- 16 -->
+  <section class="doc-section" id="js"><details open><summary><h2>16. JavaScript Files</h2></summary><div class="section-body">
+    <p>All vanilla JS (no jQuery), deferred in the footer.</p>
+    <table><thead><tr><th>File</th><th>Purpose</th><th>Globals read</th></tr></thead><tbody>
+      <tr><td>main.js</td><td>reveal, menu, cart, carousel, newsletter, FAQ accordion + scroll, contact AJAX, copy buttons</td><td>TruePharmData, tp_ajax</td></tr>
+      <tr><td>product.js</td><td>variant pills, gallery swap, qty, tabs, bundle, add-to-cart via wc-ajax + fragment apply</td><td>tp_product</td></tr>
+      <tr><td>rewards.js</td><td>redeem AJAX (tp_redeem_points)</td><td>tp_ajax</td></tr>
+      <tr><td>coa-filter.js</td><td>live COA table filter</td><td>—</td></tr>
+      <tr><td>admin-coa.js</td><td>wp.media PDF picker (admin)</td><td>tpCoaAdmin, wp.media</td></tr>
+    </tbody></table>
+    <div class="code"><button class="copy">Copy</button><pre><code><span class="tok-com">// Localized in inc/enqueue.php</span>
+TruePharmData = { ajaxUrl, restUrl, storeCartUrl, nonce }
+tp_ajax       = { ajax_url, nonce }
+tp_product    = { wc_ajax_url, cart_url, added_text, select_text }
+tpCoaAdmin    = { title, button }   <span class="tok-com">// admin only</span></code></pre></div>
+  </div></details></section>
+
+  <!-- 17 -->
+  <section class="doc-section" id="modref"><details open><summary><h2>17. Customizer Quick Reference</h2></summary><div class="section-body">
+    <table><thead><tr><th>Key</th><th>Default</th></tr></thead><tbody>
+      <tr><td>truepharm_topbar_left</td><td>Secure Checkout</td></tr>
+      <tr><td>truepharm_topbar_center</td><td>Authorized Clinical Research Formulas</td></tr>
+      <tr><td>truepharm_topbar_right</td><td>Free Priority Logistics on Orders $200+</td></tr>
+      <tr><td>truepharm_hero_mission</td><td>(brief hero mission)</td></tr>
+      <tr><td>truepharm_goals_title</td><td>Pioneering Cellular Integrity</td></tr>
+      <tr><td>truepharm_goals_p1 / _p2</td><td>(brief paragraphs)</td></tr>
+      <tr><td>truepharm_goals_image</td><td>(none)</td></tr>
+      <tr><td>truepharm_why_heading</td><td>Research demands precision. The market lacked transparency.</td></tr>
+      <tr><td>truepharm_why_p1 / _p2 / _p3</td><td>(brief paragraphs)</td></tr>
+      <tr><td>truepharm_why_step1 … step4</td><td>(pipeline steps)</td></tr>
+      <tr><td>truepharm_why_image</td><td>(none)</td></tr>
+      <tr><td>truepharm_contact_email</td><td>info@truepharmusa.com</td></tr>
+      <tr><td>truepharm_contact_phone / _address</td><td>(empty)</td></tr>
+      <tr><td>truepharm_footer_tagline</td><td>USA-synthesized, clinical-grade…</td></tr>
+      <tr><td>truepharm_legal_disclaimer</td><td>(full FDA disclaimer)</td></tr>
+      <tr><td>tp_turnstile_site_key / _secret_key</td><td>(empty)</td></tr>
+    </tbody></table>
+  </div></details></section>
+
+  <!-- 18 -->
+  <section class="doc-section" id="clientguide"><details open><summary><h2>18. Client Content Guide</h2></summary><div class="section-body">
+    <ul>
+      <li><strong>Add a product</strong> — Products → Add New. Set a category (= Molecular Class), fill the <em>Form</em> field + Chemical Data / Storage tabs. For multiple sizes use a Variable product with the <em>Vial Size</em> attribute (price per size).</li>
+      <li><strong>Add a COA</strong> — COA Library → Add New; title = compound name; fill Batch/Date/Purity; upload PDF; Publish.</li>
+      <li><strong>Change top bar text</strong> — Appearance → Customize → TruePharm: Top Bar.</li>
+      <li><strong>Set up Turnstile</strong> — Appearance → Customize → Cloudflare Turnstile → paste Site + Secret keys.</li>
+      <li><strong>Newsletter subscribers</strong> — phpMyAdmin → <code>wp_tp_newsletter_emails</code>.</li>
+      <li><strong>Contact submissions</strong> — phpMyAdmin → <code>wp_tp_contact_submissions</code> (also emailed to the admin).</li>
+      <li><strong>Footer text / disclaimer</strong> — Appearance → Customize → TruePharm: Footer.</li>
+      <li><strong>Legal pages</strong> — edit Terms of Use, Privacy Policy, Shipping &amp; Returns, Compliance Statement in the normal editor.</li>
+    </ul>
+  </div></details></section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  // Copy buttons
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.parentNode.querySelector('pre');
+      var text = pre ? pre.innerText : '';
+      var done = function(){ var o=btn.textContent; btn.textContent='Copied!'; setTimeout(function(){btn.textContent=o;},1400); };
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(done); }
+      else { var t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); done(); }
+    });
+  });
+
+  // Sidebar search — filter sections + nav links
+  var search = document.getElementById('docSearch');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.doc-section'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('#docNav a'));
+  if(search){
+    search.addEventListener('input', function(){
+      var q = search.value.trim().toLowerCase();
+      sections.forEach(function(sec){
+        var match = q === '' || sec.textContent.toLowerCase().indexOf(q) !== -1;
+        sec.style.display = match ? '' : 'none';
+        var link = document.querySelector('#docNav a[href="#'+sec.id+'"]');
+        if(link){ link.classList.toggle('hidden', !match); }
+        // auto-open matching sections while searching
+        var d = sec.querySelector('details');
+        if(d && q !== ''){ d.open = match; }
+      });
+    });
+  }
+
+  // Active nav link on scroll
+  function onScroll(){
+    var top = window.pageYOffset + 120, current = '';
+    sections.forEach(function(sec){ if(sec.offsetTop <= top){ current = sec.id; } });
+    navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+  }
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  // Smooth scroll (native via CSS) + close mobile focus
+  navLinks.forEach(function(a){
+    a.addEventListener('click', function(){ navLinks.forEach(function(l){l.classList.remove('active');}); a.classList.add('active'); });
+  });
+})();
+</script>
+</body>
+</html>
