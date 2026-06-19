@@ -128,6 +128,20 @@ function truepharm_enqueue_assets(): void {
 				)
 			);
 		}
+
+		// Cart page — AJAX quantity / remove / coupon.
+		if ( is_cart() ) {
+			wp_enqueue_script(
+				'truepharm-cart',
+				TRUEPHARM_URI . '/assets/js/cart.js',
+				array( 'truepharm-main', 'wc-cart-fragments' ),
+				truepharm_asset_version( 'assets/js/cart.js' ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	// My Account — rewards redeem + referral copy.

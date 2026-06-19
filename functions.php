@@ -87,6 +87,7 @@ $truepharm_includes = array(
 	'inc/rewards.php',          // Custom rewards points engine.
 	'inc/newsletter.php',       // Newsletter capture (custom table + AJAX).
 	'inc/contact-form.php',     // Contact form (custom table + AJAX + email).
+	'inc/cart-ajax.php',        // Cart render helpers + AJAX (qty/remove/coupon).
 	'inc/turnstile.php',        // Cloudflare Turnstile placeholder hooks.
 	'inc/entrance-gate.php',    // Age / compliance entrance gate.
 	'inc/theme-activation.php', // One-time activation setup.
@@ -197,6 +198,23 @@ function truepharm_rewards_endpoint_content(): void {
 	}
 }
 add_action( 'woocommerce_account_rewards_endpoint', 'truepharm_rewards_endpoint_content' );
+
+/**
+ * Checkout order review: prepend a product thumbnail to each line item.
+ * Scoped to the checkout page so the cart, mini-cart, and emails are untouched.
+ */
+function truepharm_checkout_review_thumbnail( $name, $cart_item, $cart_item_key ) {
+	if ( ! is_checkout() || is_cart() ) {
+		return $name;
+	}
+	$product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
+	if ( ! $product instanceof WC_Product ) {
+		return $name;
+	}
+	$thumb = $product->get_image( 'woocommerce_gallery_thumbnail', array( 'class' => 'co-thumb' ) );
+	return '<span class="co-item">' . $thumb . '<span class="co-name">' . $name . '</span></span>';
+}
+add_filter( 'woocommerce_cart_item_name', 'truepharm_checkout_review_thumbnail', 20, 3 );
 
 /**
  * Order History: 10 orders per page.

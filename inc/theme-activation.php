@@ -42,12 +42,43 @@ function truepharm_activate(): void {
 		wp_schedule_event( time(), 'daily', 'tp_birthday_check' );
 	}
 
+	// Use the classic Cart/Checkout shortcodes so the theme templates render.
+	truepharm_force_classic_wc_pages();
+
 	// Seed content + legal pages and assign templates (idempotent).
 	truepharm_ensure_pages();
 
 	flush_rewrite_rules();
 }
 add_action( 'after_switch_theme', 'truepharm_activate' );
+
+/**
+ * Convert the Cart & Checkout pages from WooCommerce blocks to the classic
+ * shortcodes, so the theme's woocommerce/cart and woocommerce/checkout
+ * templates are used. Idempotent — only rewrites pages still using blocks.
+ */
+function truepharm_force_classic_wc_pages(): void {
+	if ( ! function_exists( 'wc_get_page_id' ) ) {
+		return;
+	}
+	$map = array(
+		wc_get_page_id( 'cart' )     => '[woocommerce_cart]',
+		wc_get_page_id( 'checkout' ) => '[woocommerce_checkout]',
+	);
+	foreach ( $map as $page_id => $shortcode ) {
+		if ( $page_id > 0 ) {
+			$page = get_post( $page_id );
+			if ( $page && false !== strpos( $page->post_content, 'wp:woocommerce/' ) ) {
+				wp_update_post(
+					array(
+						'ID'           => $page_id,
+						'post_content' => $shortcode,
+					)
+				);
+			}
+		}
+	}
+}
 
 /**
  * Ensure a page exists (by slug), is published, and uses the given template.

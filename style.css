@@ -1127,3 +1127,84 @@ textarea.form-control{resize:vertical;min-height:160px;}
 .error-404 p{font-size:1.1rem;color:var(--slate-soft);max-width:40em;margin:0 auto 30px;}
 .error-404-search{max-width:500px;margin:0 auto 30px;}
 .search-result-type{font-size:0.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--warm);font-weight:700;}
+
+/* =====================================================================
+   ===================  CART PAGE  =====================================
+   ===================================================================== */
+.cart-section{padding:60px 0 80px;}
+.tp-cart-notices{margin-bottom:24px;}
+.cart-layout{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(0,1fr);gap:40px;align-items:start;}
+
+/* Cart table */
+.tp-cart-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.tp-cart-table thead{background:var(--sky);}
+.tp-cart-table th{padding:14px 16px;text-align:left;font-family:'Montserrat';font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--navy);}
+.tp-cart-table td{padding:16px;border-top:1px solid var(--line);vertical-align:middle;font-size:0.95rem;color:var(--slate);}
+.tp-cart-table tbody tr{transition:background .15s;}
+.tp-cart-table tbody tr:hover{background:#f8fafc;}
+.tp-cart-table .col-remove{width:42px;text-align:center;}
+.tp-cart-table .col-thumb{width:76px;}
+.tp-cart-table .col-qty{width:140px;}
+.tp-remove{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#f1f5f9;color:var(--slate-soft);text-decoration:none;font-size:1.1rem;line-height:1;transition:.2s;}
+.tp-remove:hover{background:#fff1f2;color:#be123c;}
+.tp-cart-table .col-thumb img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;}
+.tp-cart-table .col-name a{color:var(--navy);font-weight:600;text-decoration:none;}
+.tp-cart-table .col-name a:hover{color:var(--warm);}
+.tp-cart-table .item-meta{font-size:0.8rem;color:var(--slate-soft);margin-top:4px;}
+.tp-cart-table .col-total{font-family:'Montserrat';font-weight:700;color:var(--navy);}
+.tp-cart-table .qty-input{width:118px;height:46px;}
+.tp-cart-table .qty-input input{width:38px;}
+
+/* Cart actions row */
+.cart-actions{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px;}
+.tp-coupon{display:flex;gap:8px;flex-wrap:wrap;}
+.tp-coupon .input-text{padding:12px 14px;border:1px solid var(--line);border-radius:6px;font-family:'Inter';font-size:0.9rem;outline:none;min-width:180px;}
+.tp-coupon .input-text:focus{border-color:var(--warm);box-shadow:0 0 0 3px var(--warm-soft);}
+.tp-update-cart{font-size:0.8rem;padding:10px 16px;}
+
+/* Order summary */
+.cart-summary{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;position:sticky;top:110px;box-shadow:0 10px 30px -12px rgba(0,0,0,0.05);}
+.cart-summary h2{font-family:'Montserrat';font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:20px;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:0.95rem;color:var(--slate-soft);}
+.summary-row.summary-discount span:last-child{color:var(--warm);font-weight:700;}
+.summary-total{border-bottom:none;border-top:2px solid var(--line);margin-top:6px;padding-top:18px;font-family:'Montserrat';font-weight:800;font-size:1.25rem;color:var(--navy);}
+.bundle-info{background:var(--sky);border:1px solid var(--sky-edge);border-radius:8px;padding:12px 14px;font-size:0.85rem;color:var(--navy);line-height:1.5;margin:18px 0;}
+.cart-checkout-btn{display:block;width:100%;text-align:center;margin-top:18px;}
+.cart-payments{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:20px;font-size:0.75rem;color:var(--slate-soft);}
+.cart-payments .pay-pill{background:#f1f5f9;border:1px solid var(--line);border-radius:4px;padding:3px 7px;font-weight:700;font-size:0.7rem;color:var(--slate);}
+.cart-secure{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:0.78rem;color:var(--slate-soft);}
+
+/* Empty cart */
+.cart-empty-state{text-align:center;padding:80px 24px;max-width:520px;margin:0 auto;}
+.cart-empty-state svg{color:var(--navy);opacity:.4;margin-bottom:18px;}
+.cart-empty-state h2{font-family:'Montserrat';font-weight:800;color:var(--navy);font-size:1.6rem;margin-bottom:12px;}
+.cart-empty-state p{color:var(--slate-soft);margin-bottom:28px;}
+
+@media(max-width:900px){
+  .cart-layout{grid-template-columns:1fr;gap:30px;}
+  .cart-summary{position:relative;top:0;}
+}
+@media(max-width:768px){
+  .tp-cart-table thead{display:none;}
+  .tp-cart-table,.tp-cart-table tbody,.tp-cart-table tr,.tp-cart-table td{display:block;width:100%;}
+  .tp-cart-table tr{position:relative;border-top:1px solid var(--line);padding:10px 0;}
+  .tp-cart-table td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:none;padding:8px 16px;}
+  .tp-cart-table td::before{content:attr(data-title);font-family:'Montserrat';font-weight:700;font-size:0.72rem;text-transform:uppercase;color:var(--navy);}
+  .tp-cart-table .col-remove{position:absolute;top:8px;right:10px;width:auto;padding:0;}
+  .tp-cart-table .col-thumb{padding-top:18px;}
+  .cart-actions{flex-direction:column;align-items:stretch;}
+}
+
+/* =====================================================================
+   ===================  CHECKOUT ENHANCEMENTS  =========================
+   ===================================================================== */
+/* Order-review line item thumbnails */
+.co-item{display:flex;align-items:center;gap:10px;}
+.co-thumb{width:44px;height:44px;border-radius:6px;border:1px solid var(--line);object-fit:cover;flex-shrink:0;}
+.co-name{flex:1;}
+.woocommerce-checkout-review-order-table .product-name{vertical-align:middle;}
+
+/* "Ship to a different address?" toggle */
+.woocommerce-shipping-fields h3#ship-to-different-address{display:flex;align-items:center;gap:10px;font-family:'Montserrat';color:var(--navy);font-size:1rem;margin:8px 0 16px;}
+.woocommerce-shipping-fields h3#ship-to-different-address label{display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;}
+.woocommerce-shipping-fields #ship-to-different-address-checkbox{width:18px;height:18px;accent-color:var(--warm);}

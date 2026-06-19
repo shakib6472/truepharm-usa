@@ -60,7 +60,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 
 			<div class="order-summary">
-				<h2 id="order_review_heading"><?php esc_html_e( 'Order Summary', 'truepharm' ); ?></h2>
+				<h2 id="order_review_heading"><?php esc_html_e( 'Your Order', 'truepharm' ); ?></h2>
 
 				<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
 
